@@ -1,0 +1,16 @@
+module	sign15(out,d,clk,load);
+	parameter	n=4;
+	output	out;
+	input	clk,load;
+	input	[n-1:0]d;
+	wire w1;
+	reg	[n-1:0]q;
+		always @(posedge clk)
+			if (load)
+				q <= d;
+			else 
+				q <= [q[n-2:0],w1];
+			//此处是F防止死循环的写法	
+	assign  w1=(q[1]^q[0])|(~(q[3])&(~q[2])&(~q[2])&(~q[1])&(~q[0])) ;
+	assign  out=q[n-1] ;
+endmodule

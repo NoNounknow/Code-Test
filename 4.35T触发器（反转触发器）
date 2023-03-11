@@ -1,0 +1,44 @@
+module TFF(q,t,clk,rst);
+	output q;
+	input t,clk,rst;
+	reg	q;
+		always @(posedge clk or posedge rst) 
+			if (!rst) 
+				q <= 0;
+			else if (t) 
+				q <= ~q;
+			else
+				q <= q;
+
+endmodule
+
+//testbench
+//part1 各类输入输出变量的定义
+module TFF_testbench;
+	reg t,clk,rst;//激励信号定义为reg类型
+//电路中的输入信号以及时钟，控制信号都是激励信号，例如JK触发器中JK的赋值。
+	wire	q;//显示信号定义为wire类型，即输出信号，打印信号。
+	//如果有整形，参数型的话这里也需要写入。integer parameter
+	
+	//part2 待测试模块的调用：
+	TFF U1(.q(q),.clk(clk),.t(t),.rst(rst));
+
+	always//产生测试激励向量
+	#5 clk = ~clk;//产生clk信号,delay=5 周期为10个时间单位的clk时钟
+	initial 
+		begin
+			clk = 0；//为clk赋予一个初值来防止不定状态,
+			//如果不定义的话则是一个100m的占空比为50的时钟信号
+			//默认1ns
+			#3 rst = 0; #5 rst = 1;
+			T = 1; #30 T = 0; #20 T = 1;		
+		end
+	initial//对输出响应打印并且收集
+		begin
+			&monitor($time,"T=%d,clk=%d,rst=%d,q=%d",t,clk,rst,q);
+			//先打印出时间，再打印出各个信号的波形。
+		end
+endmodule
+
+
+

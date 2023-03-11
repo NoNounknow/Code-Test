@@ -1,0 +1,86 @@
+//若是没有调用模块也没有$display等函数的话，需要进行定义才可以输出信号？
+`timescale	1ns/1ns
+module	serial_tb(q1_out,q2_out);//此处采用阻塞串行赋值语句。
+	output	q1_out,q2_out;
+	reg	q1_out,q2_out;
+		initial
+			begin
+					 q1_out = 0;
+				#50  q1_out = 1;
+				#100 q1_out = 0;
+				#100 q1_out = 1;
+				#50	 q1_out = 0;
+				#100 q1_out = 1;
+				#50  q1_out = 0;
+				#50  q1_out = 1;
+				#100 q1_out = 0;
+			end
+
+		initial
+			begin
+					 q2_out = 0;
+				#100 q2_out = 1;
+				#100 q2_out = 0;
+				#50  q2_out = 1;
+				#100 q2_out = 0;
+				#50  q2_out = 1;
+				#100 q2_out = 0;
+				#50  q2_out = 1;
+				#50  q2_out = 0;
+			end
+endmodule
+
+`timescale	1ns/1ns
+module	serial_tb(q1_out,q2_out);//此处采用阻塞串行赋值语句。
+	output	q1_out,q2_out;
+	reg	q1_out,q2_out;
+		initial
+			fork
+					 q1_out = 0;
+				#50  q1_out = 1;
+				#150 q1_out = 0;
+				#250 q1_out = 1;
+				#300 q1_out = 0;
+				#400 q1_out = 1;
+				#450 q1_out = 0;
+				#500 q1_out = 1;
+				#600 q1_out = 0;	
+			join
+
+		initial
+			fork
+					 q2_out = 0;
+				#100 q2_out = 1;
+				#200 q2_out = 0;
+				#250 q2_out = 1;
+				#350 q2_out = 0;
+				#400 q2_out = 1;
+				#500 q2_out = 0;
+				#550 q2_out = 1;
+				#600 q2_out = 0;
+			join
+endmodule
+
+
+initial
+	begin
+		a = 0;
+		a = #5 1;
+		a = #10 0;
+		a = #15 1;
+	end
+//等价于
+parameter r=1,d=0;
+	initial
+		begin
+			a = 0;
+		#5  a = r;
+		#10 a = d;
+		#15 a = r;
+		end
+
+always @(敏感事件表)//当敏感事件表发生变化的时候，执行下列语句。，一般有if case state = next_state;等。
+	表达式;
+
+与@(敏感事件表);//当敏感事件表内容变化的时候，结束控制过程。
+
